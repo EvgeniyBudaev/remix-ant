@@ -10,35 +10,35 @@ import { v4 as uuidV4 } from "uuid";
 const objectStorage = {};
 
 vi.spyOn(window.URL, "createObjectURL").mockImplementation(
-  (...args) => {
-    if(args[0] instanceof global.Blob) {
-      const blob = args[0];
+    (...args) => {
+      if(args[0] instanceof global.Blob) {
+        const blob = args[0];
 
-      const objectUrl = `blob:${uuidV4()}`;
-      objectStorage[objectUrl] = blob.text();
-      return objectUrl;
+        const objectUrl = `blob:${uuidV4()}`;
+        objectStorage[objectUrl] = blob.text();
+        return objectUrl;
+      }
+
+      return "http://fake.url";
     }
-
-    return "http://fake.url";
-  }
 );
 
 global.__vitest_worker__.rpc = new Proxy(global.__vitest_worker__.rpc, {
   get(target, property, _receiver) {
     if(property === "fetch") {
-        return async (url, ...args) => {
-          const objectUrlIndex = url.indexOf("blob:");
+      return async (url, ...args) => {
+        const objectUrlIndex = url.indexOf("blob:");
 
-          if(objectUrlIndex !== -1) {
-            const objectUrl = url.slice(objectUrlIndex);
-            return { code: await objectStorage[objectUrl] };
-          }
-  
-          return target.fetch(url, ...args);
+        if(objectUrlIndex !== -1) {
+          const objectUrl = url.slice(objectUrlIndex);
+          return { code: await objectStorage[objectUrl] };
         }
-      } else {
-        return target[property];
+
+        return target.fetch(url, ...args);
       }
+    } else {
+      return target[property];
+    }
   }
 });
 
