@@ -10,11 +10,11 @@ import { v4 as uuidV4 } from "uuid";
 const objectStorage = {};
 
 vi.spyOn(window.URL, "createObjectURL").mockImplementation((...args) => {
-  if (args[0] instanceof global.Blob) {
+  if ("_kek_blob_parts" in args[0]) {
     const blob = args[0];
 
     const objectUrl = `blob:${uuidV4()}`;
-    objectStorage[objectUrl] = blob.text();
+    objectStorage[objectUrl] = blob._kek_blob_parts.join("");
     return objectUrl;
   }
 
@@ -43,11 +43,24 @@ global.__vitest_worker__.rpc = new Proxy(global.__vitest_worker__.rpc, {
 global.Worker = undefined;
 defineWebWorkers();
 
+let globalBlob = Blob;
+
 Object.defineProperty(global, "Blob", {
   get() {
-    return Blob;
+    return globalBlob;
   },
-  set(_value) {},
+  set(_value) {
+    class Blobba extends _value {
+      constructor(...args) {
+        super(...args);
+
+        this._kek_blob_parts = args[0];
+        this._kek_options = args[1];
+      }
+    }
+
+    globalBlob = Blobba;
+  },
 });
 
 const MockIntersectionObserver = vi.fn(() => ({
