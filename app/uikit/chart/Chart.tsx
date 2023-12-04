@@ -61,7 +61,6 @@ const ChartComponent: FC<TChartProps> = ({
   formatCurrency,
   dataTestId = DATA_TEST_ID,
 }) => {
-  console.log("111111111111111111111 Chart");
   const chartContainer = useRef<HTMLDivElement>(null);
   const [chart, setChart] = useState<ChartAntvG2 | null>(null);
 
