@@ -11,6 +11,8 @@ const DEFAULT_PROPS = {
   currencyCode: "RUB",
   currencyUnit: "",
   dataTestId: DATA_TEST_ID,
+  max: 54,
+  min: -54,
   theme: "light",
 };
 
@@ -19,27 +21,32 @@ describe("Chart component", () => {
     vitest.useFakeTimers({ shouldAdvanceTime: true });
   });
 
-  it("should render the Chart", () => {
-    const debounce = 5000;
+  it("should render bd the Chart", () => {
+    const debounce = 1000;
     const { getByTestId } = render(
-      //   <Chart
-      //   {...DEFAULT_PROPS}
-      //   data={tdChartMockData}
-      //   listCurrenciesShow={['crypto', 'fiat']}
-      //   max={54}
-      //   min={-54}
-      //   variantChart={EChartVariants.Variant1}
-      // />,
       <Chart
         {...DEFAULT_PROPS}
         data={bdChartMockData}
         listCurrenciesShow={["crypto", "fiat"]}
-        max={54}
-        min={-54}
         variantChart={EChartVariants.Variant2}
       />
     );
 
+    const chart = getByTestId(DATA_TEST_ID);
+    vitest.advanceTimersByTime(debounce);
+    expect(chart).toBeInTheDocument();
+  });
+
+  it("should render the td Chart", () => {
+    const debounce = 1000;
+    const { getByTestId } = render(
+      <Chart
+        {...DEFAULT_PROPS}
+        data={tdChartMockData}
+        listCurrenciesShow={["crypto", "fiat"]}
+        variantChart={EChartVariants.Variant1}
+      />
+    );
     const chart = getByTestId(DATA_TEST_ID);
     vitest.advanceTimersByTime(debounce);
     expect(chart).toBeInTheDocument();
