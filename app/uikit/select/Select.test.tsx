@@ -15,8 +15,8 @@ const defaultProps = {
     theme: ESelectTheme.Primary,
 };
 
-const renderSelect = (props = {}) => {
-    return render(<Select {...props} />);
+const renderSelect = () => {
+    return render(<Select {...defaultProps} />);
 };
 
 describe('Select component', () => {
