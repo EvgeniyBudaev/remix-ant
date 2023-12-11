@@ -108,14 +108,12 @@ export function updateChart({
       nice: true,
       formatter: (val: number) => {
         if (val > 0)
-          return `+${currencyUnit}${
-            formatCryptoCurrency?.(val, banknote ?? "") ?? val
-          }`;
+          return `+${currencyUnit}${formatCryptoCurrency?.(val, banknote ?? "") ?? val
+            }`;
         if (val < 0)
-          return `-${currencyUnit}${
-            formatCryptoCurrency?.(Math.abs(val), banknote ?? "") ??
+          return `-${currencyUnit}${formatCryptoCurrency?.(Math.abs(val), banknote ?? "") ??
             Math.abs(val)
-          }`;
+            }`;
         return formatCryptoCurrency?.(0, banknote ?? "") ?? `0 ${banknote}`;
       },
     };
@@ -206,7 +204,7 @@ export function updateChart({
       valueAdjusted:
         value.value &&
         Math.sign(value.value.crypto) *
-          Math.max(Math.abs(value.value.crypto), minVisibleValue),
+        Math.max(Math.abs(value.value.crypto), minVisibleValue),
     }));
   };
 
@@ -216,14 +214,12 @@ export function updateChart({
       return {
         name: "value",
         ...(checkCurrency(EAmount.Crypto) && {
-          crypto: `${currencyUnit}${
-            formatCryptoCurrency?.(value.crypto, banknote ?? "") ?? value.crypto
-          }`,
+          crypto: `${currencyUnit}${formatCryptoCurrency?.(value.crypto, banknote ?? "") ?? value.crypto
+            }`,
         }),
         ...(checkCurrency(EAmount.Fiat) && {
-          fiat: `${currencyUnit}${
-            formatCurrency?.(value.fiat, currencyCode ?? "") ?? value.fiat
-          }`,
+          fiat: `${currencyUnit}${formatCurrency?.(value.fiat, currencyCode ?? "") ?? value.fiat
+            }`,
         }),
       };
     },
@@ -238,9 +234,8 @@ export function updateChart({
       max,
       nice: true,
       formatter: (val) => {
-        return `${currencyUnit}${
-          formatNumber ? formatNumber(val) : val
-        } ${banknote}`;
+        return `${currencyUnit}${formatNumber ? formatNumber(val) : val
+          } ${banknote}`;
       },
     });
     chart.legend(false);
@@ -256,9 +251,9 @@ export function updateChart({
   }
 
   if (variantChart === EChartVariants.Variant3) {
-    chart.data(data);
-    chart.axis("value", getCommonYAxisProps(colorLabelYAxis));
-    chart.scale("value", {
+    chart.data(mapSingleValueData(data));
+    chart.axis("valueAdjusted", getCommonYAxisProps(colorLabelYAxis));
+    chart.scale("valueAdjusted", {
       min: 0,
       max: 100,
       tickInterval: 10,
@@ -270,10 +265,10 @@ export function updateChart({
     chart.legend(false);
     chart
       .interval()
-      .position("month*value")
+      .position("month*valueAdjusted")
       .size({ values: [valuesSize] })
       .style({ radius: 4 })
-      .color("value", (val) => {
+      .color("valueAdjusted", (val) => {
         if (val >= 15 && val <= 20) return getThemeColor("--color-accent-6");
         if (val > 20 && val <= 70) return getThemeColor("--color-accent-4");
         if (val > 70) return getThemeColor("--color-accent-1");

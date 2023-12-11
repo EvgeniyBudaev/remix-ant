@@ -1,10 +1,9 @@
 import { describe, it, expect, vitest, beforeEach } from "vitest";
-import canvas from "vitest-canvas-mock";
 import { render } from "@testing-library/react";
 import { Chart } from "./Chart";
 import { DATA_TEST_ID } from "./constants";
 import { EChartVariants } from "./types";
-import { bdChartMockData, tdChartMockData } from "./mockData";
+import { chartMockData, bdChartMockData, tdChartMockData } from "./mockData";
 
 const DEFAULT_PROPS = {
   banknote: "BTC",
@@ -21,7 +20,23 @@ describe("Chart component", () => {
     vitest.useFakeTimers({ shouldAdvanceTime: true });
   });
 
-  it("should render bd the Chart", () => {
+  it("should render the Chart variant 1", () => {
+    const debounce = 1000;
+    const { getByTestId } = render(
+      <Chart
+        {...DEFAULT_PROPS}
+        data={tdChartMockData}
+        listCurrenciesShow={["crypto", "fiat"]}
+        variantChart={EChartVariants.Variant1}
+      />
+    );
+
+    const chart = getByTestId(DATA_TEST_ID);
+    vitest.advanceTimersByTime(debounce);
+    expect(chart).toBeInTheDocument();
+  });
+
+  it("should render the Chart variant 2", () => {
     const debounce = 1000;
     const { getByTestId } = render(
       <Chart
@@ -37,16 +52,17 @@ describe("Chart component", () => {
     expect(chart).toBeInTheDocument();
   });
 
-  it("should render the td Chart", () => {
+  it("should render the Chart variant 3", () => {
     const debounce = 1000;
     const { getByTestId } = render(
       <Chart
         {...DEFAULT_PROPS}
-        data={tdChartMockData}
+        data={chartMockData}
         listCurrenciesShow={["crypto", "fiat"]}
-        variantChart={EChartVariants.Variant1}
+        variantChart={EChartVariants.Variant3}
       />
     );
+
     const chart = getByTestId(DATA_TEST_ID);
     vitest.advanceTimersByTime(debounce);
     expect(chart).toBeInTheDocument();

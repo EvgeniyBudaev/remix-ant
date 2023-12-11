@@ -1,0 +1,34 @@
+import type * as React from 'react';
+import type { TLabelType } from '~/components';
+import type { ESelectTheme, ESelectSize } from '../enums';
+import type { TRenderInputBody, TSelectOption, TSelectValue } from '../types';
+
+export type THeaderProps = {
+    disabled?: boolean;
+    hideArrowIcon?: boolean;
+    hideCloseIcon?: boolean;
+    info?: string | React.ReactElement;
+    inputValue?: string | number | undefined;
+    isDirty?: boolean;
+    isFiltered?: boolean;
+    isFocus?: boolean;
+    isOpen: boolean;
+    label?: TLabelType;
+    loading?: boolean;
+    name?: string;
+    notError: boolean;
+    onChange?: (value: TSelectValue) => void;
+    onChangeFocus?: (value: boolean) => void;
+    onChangeInputValue?: (value: string) => void;
+    onClear?: () => void;
+    onFilterOption?: React.ChangeEventHandler<HTMLInputElement>;
+    options: TSelectOption[];
+    prefixIcon?: JSX.Element;
+    postfixIcon?: JSX.Element;
+    renderInputBody?: TRenderInputBody;
+    required: boolean;
+    resultValue: TSelectValue;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    size: `${ESelectSize}`;
+    theme: `${ESelectTheme}`;
+};
