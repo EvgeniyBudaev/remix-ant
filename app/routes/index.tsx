@@ -5,11 +5,15 @@ import {
   tdChartMockData,
 } from "~/uikit/chart/mockData";
 import { dataClouds, WordCloud } from "~/uikit/wordCloud";
+import {Link} from "@remix-run/react";
 
 export default function Index() {
   return (
     <div>
       <h1>Welcome to Remix</h1>
+        <div>
+            <Link to="/catalogs">Перейти к каталогам</Link>
+        </div>
       <div>
         <WordCloud data={dataClouds} />
       </div>
